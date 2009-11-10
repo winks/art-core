@@ -32,8 +32,10 @@
   *		* v0.2 	- added sha1
   *				- mocked getType() for now
   */
-var mypass = hex_sha1("asdf");
-postit("http://example.org/upload/", mypass);
+var dp_pass = "asdf";
+var dp_host = "http://example.org/upload/";
+
+postit(dp_host, hex_sha1(dp_pass));
 
 function _e(arg) {
 	var DEBUG = false;
@@ -90,6 +92,11 @@ function buildMIME(sFileName, sBoundary, sName, bAttach) {
 function postit(sUrl, sToken) {
 	_e(">POSTIT");
 	
+	var iArgs = WScript.Arguments.length;
+	if (iArgs == 0 ) {
+		WScript.Echo ( "no argument given" );
+		WScript.Quit(1);
+	}
 	var sFileName = WScript.Arguments.Item(0);
 
 	var base64 = new Base64();
