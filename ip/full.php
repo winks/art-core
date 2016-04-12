@@ -6,11 +6,28 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
     if (isset($_REQUEST['help']) || '/help' == $_SERVER['REQUEST_URI']) {
         echo "Displays the ip address you're connecting from" . PHP_EOL;
         echo "" . PHP_EOL;
-        echo "/ptr  or ?ptr  - show reverse dns" . PHP_EOL;
-        echo "/help or ?help - show this help" . PHP_EOL;
+        echo "/help or ?help         - show this help" . PHP_EOL;
+        echo "/ptr  or ?ptr          - show reverse dns" . PHP_EOL;
+        echo "?ts=1234               - show ISO 8601 date for unix timestamp 1234" . PHP_EOL;
+        echo "?ts=1234&f=Y           - show ISO 8601 date for timestamp and format according to php.net/date" . PHP_EOL;
+        echo "?d=2006-05-04T11:12:13 - show unix timestamp for ISO 8601 date, assumes UTC" . PHP_EOL;
     } else if (isset($_REQUEST['ptr']) || '/ptr' == $_SERVER['REQUEST_URI']) {
         $ptr = gethostbyaddr($ip);
         echo (false === $ptr) ? $ip : $ptr;
+    } else if (isset($_REQUEST['ts'])) {
+        $ts = intval($_REQUEST['ts']);
+        if ($ts < 1 &&  strlen($_REQUEST['ts']) < 1) { $ts = time(); }
+        $fmt = 'c';
+        if (isset($_REQUEST['f'])) {
+            $fmt = $_REQUEST['f'];
+        }
+        $r = gmdate($fmt, $ts);
+        if (false === $r) { $r = gmdate('c', $ts); }
+        echo $r;
+    } else if (isset($_REQUEST['d'])) {
+        preg_match('((\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*)', $_REQUEST['d'], $m);
+        $r = gmmktime($m[4], $m[5], $m[6], $m[2], $m[3], $m[1]);
+        echo $r;
     } else {
         echo $ip;
     }
@@ -27,6 +44,7 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         'HTTP_ACCEPT_LANGUAGE',
         'HTTP_ACCEPT_ENCODING',
         'HTTP_ACCEPT_CHARSET',
+        'HTTP_CONNECTION',
         'REQUEST_METHOD',
         'HTTP_REFERER',
         'HTTP_HOST',

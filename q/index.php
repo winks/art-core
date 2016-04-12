@@ -50,29 +50,28 @@ function armorylite($char, $realm = 'aggramar', $loc = 'eu') {
 $target = array(
 'du'   => 'http://www.duden.de/suchen/dudenonline/%s',
 'bugs' => 'http://bugs.php.net/search.php?search_for=&boolean=1&limit=All&order_by=&direction=ASC&cmd=display&status=All&php_os=&phpver=&assign=&author_email=&bug_age=7',
-'iz'   => 'http://izlude.de/%s',
-'ip'   => 'http://ip.f5n.de',
+'ip'   => 'http://ip.f5n.de/%s',
 'pdo'  => 'http://packages.debian.org/%s',
+'pubu' => 'http://packages.ubuntu.com/search?keywords=%s',
 'suse' => 'http://software.opensuse.org/search?q=%s',
 'pear' => 'http://pear.php.net/package/%s',
 'wh'   => 'http://www.wowhead.com/?search=%s',
 'ww'   => 'http://wowpedia.org/%s',
 'wp'   => 'http://de.wikipedia.org/wiki/%s',
 'wpe'  => 'http://en.wikipedia.org/wiki/%s',
-'wpm'  => 'http://wikipedia.7val.com/wiki/%s',
+'wpm'  => 'http://en.m.wikipedia.org/wiki/%s',
 'd'    => 'http://dict.leo.org/?search=%s',
 'dit'  => 'http://dict.leo.org/itde?search=%s',
 'des'  => 'http://dict.leo.org/esde?search=%s',
 'dfr'  => 'http://dict.leo.org/frde?search=%s',
-'dch'  => 'http://dict.leo.org/chde?search=%s',
+'dcn'  => 'http://dict.leo.org/chde?search=%s',
 's'    => 'https://encrypted.google.com/search?hl=de&q=%s',
 'imdbg'=> 'http://german.imdb.com/find?q=%s',
 'imdb' => 'http://www.imdb.com/find?q=%s',
 'arm'  => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
 'arma' => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
 'arms' => 'http://%2$s.battle.net/wow/en/search?q=%1$s',
-'armq' => 'http://quickarmory.com/?n=%1$s&r=%2$s',
-'arml' => 'http://armorylite.com/%s/%s/%s',
+'armt' => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
 'yt'   => 'http://www.youtube.com/results?search_query=%s&search=Search',
 'wr'   => 'http://www.warcraftrealms.com/search.php?serverid=-1&raceid=-1&classid=-1&minlevel=10&maxlevel=80&search=%s&Submit1=SEARCH',
 'wa'   => 'http://www.wolframalpha.com/input/?i=%s',
@@ -123,6 +122,8 @@ if ('/' == $s[0]) {
         $out = armory($s[1],$s[2],$s[3]);
     } elseif ('arma' == $p) {
         $out = armory($s[1],'chamber-of-aspects',$s[3]);
+    } elseif ('armt' == $p) {
+        $out = armory($s[1],'tichondrius',$s[3]);
     } elseif ('arms' == $p) {
         $out = armorySearch($s[1],$s[2]);
     } elseif ('qarm' == $p) {
