@@ -1,18 +1,11 @@
 <?php
-header('Content-type: text/html');
-
-$x = array(
-'REMOTE_ADDR', 
-);
-foreach($x as $x) {
-    if (isset($_SERVER[$x])) {
-        $y = str_pad($x, 21);
-        $h = str_pad('Hostname', 21);
-        $value = $_SERVER[$x];
-        printf('%s'.PHP_EOL, $value);
-        if ('REMOTE_ADDR' == $x) {
-#            printf('%s: %s'.PHP_EOL, $h, gethostbyaddr($value));
-        }
-    }
+header('Content-type: text/plain');
+$ip = preg_replace('([^0-9a-fA-F:\.])', '', $_SERVER['REMOTE_ADDR']);
+if (isset($_REQUEST['ptr']) || '/ptr' == $_SERVER['REQUEST_URI']) {
+    $ptr = gethostbyaddr($ip);
+    echo (false === $ptr) ? $ip : $ptr;
+} else {
+    echo $ip;
 }
-?>
+echo PHP_EOL;
+exit();

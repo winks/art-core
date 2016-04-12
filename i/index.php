@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>info</title></head><body><pre>
 <?php
 header('Content-type: text/html');
-
 $x = array(
 'REMOTE_ADDR',
 'HTTP_USER_AGENT',
@@ -23,7 +22,7 @@ foreach($x as $x) {
         $y = str_pad($x, 21);
         $h = str_pad('Hostname', 21);
         $value = $_SERVER[$x];
-        printf('%s: %s'.PHP_EOL, $y, $value);
+        printf('%s: %s' . PHP_EOL, $y, $value);
         if ('REMOTE_ADDR' == $x) {
             printf('%s: %s'.PHP_EOL, $h, gethostbyaddr($value));
         }
