@@ -15,7 +15,9 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         $ptr = gethostbyaddr($ip);
         echo (false === $ptr) ? $ip : $ptr;
     } else if (isset($_REQUEST['ts'])) {
-        $ts = intval($_REQUEST['ts']);
+        $ts = $_REQUEST['ts'];
+        $ts = preg_replace('([^0-9]+)', '', $ts);
+        $ts = intval($ts);
         if ($ts < 1 &&  strlen($_REQUEST['ts']) < 1) { $ts = time(); }
         $fmt = 'c';
         if (isset($_REQUEST['f'])) {
@@ -65,6 +67,17 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
                 printf('%s: %s'.PHP_EOL, $h, gethostbyaddr($value));
             }
         }
+    }
+    if (strtolower(getenv('HTTPS')) == 'on') {
+        printf(
+            '%s (%s %sbit %s %s)',
+            getenv('SSL_PROTOCOL'),
+            getenv('SSL_CIPHER'),
+            getenv('SSL_CIPHER_USEKEYSIZE'),
+            getenv('SSL_SERVER_S_DN'),
+            getenv('SSL_TLS_SNI')
+        ) . PHP_EOL;
+
     }
     echo '</pre></body></html>';
 }
