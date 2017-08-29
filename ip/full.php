@@ -69,8 +69,10 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         }
     }
     if (strtolower(getenv('HTTPS')) == 'on') {
+        $y = str_pad('SSL', 21);
         printf(
-            '%s (%s %sbit %s %s)',
+            '%s: %s (%s %sbit %s %s)',
+            $y,
             getenv('SSL_PROTOCOL'),
             getenv('SSL_CIPHER'),
             getenv('SSL_CIPHER_USEKEYSIZE'),
