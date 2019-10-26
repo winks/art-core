@@ -1,27 +1,31 @@
 <?php
-function armory($char, $realm = 'Aggramar', $loc = 'eu', $search = false) {
+function armory($char, $realm = 'aggramar', $loc = 'eu', $region = 'en-gb') {
     global $target;
-    if ('eu' != strtolower($loc) && '' != $loc) {
-        $loc = 'www';
-    } else {
+    if ('eu' == strtolower($loc) || '' == $loc) {
         $loc = 'eu';
+        $region = 'en-gb';
+    } else {
+        $loc = 'us';
+        $region = 'en-us';
     }
-    if ('' == $realm) $realm = 'Aggramar';
-    $out = sprintf($target['arm'], $char, $realm, $loc);
+    if ('' == $realm) $realm = 'aggramar';
+    $out = sprintf($target['arm'], $char, $realm, $loc, $region);
     #var_dump($out);
     return $out;
 }
+
 function armorySearch($char, $loc = 'eu') {
     global $target;
-    if ('eu' != strtolower($loc) && '' != $loc) {
-        $loc = 'www';
+	if ('eu' == strtolower($loc) || '' == $loc) {
+        $region = 'en-gb';
     } else {
-        $loc = 'eu';
+        $region = 'en-us';
     }
-    $out = sprintf($target['arms'], $char, $loc);
+    $out = sprintf($target['arms'], $char, $region);
     #var_dump($out);
     return $out;
 }
+
 function qarmory($char, $realm = 'Aggramar', $loc = 'eu') {
     global $target;
     if ('eu' != strtolower($loc) && '' != $loc) {
@@ -48,39 +52,40 @@ function armorylite($char, $realm = 'aggramar', $loc = 'eu') {
 
 
 $target = array(
-'du'   => 'http://www.duden.de/suchen/dudenonline/%s',
+'arm'  => 'https://worldofwarcraft.com/%4$s/character/%3$s/%2$s/%1$s',
+'armh' => 'https://worldofwarcraft.com/%4%s/character/%3$s/%2$s/%1$s',
+'arms' => 'https://worldofwarcraft.com/%2$s/search?q=%1$s',
 'bugs' => 'http://bugs.php.net/search.php?search_for=&boolean=1&limit=All&order_by=&direction=ASC&cmd=display&status=All&php_os=&phpver=&assign=&author_email=&bug_age=7',
+'du'   => 'http://www.duden.de/suchen/dudenonline/%s',
+'d'    => 'http://dict.leo.org/?search=%s',
+'dcn'  => 'http://dict.leo.org/chde?search=%s',
+'des'  => 'http://dict.leo.org/esde?search=%s',
+'dfr'  => 'http://dict.leo.org/frde?search=%s',
+'dit'  => 'http://dict.leo.org/itde?search=%s',
+'g'    => 'https://duckduckgo.com/?q=%s',
+'imdb' => 'http://www.imdb.com/find?q=%s',
+'imdbg'=> 'http://german.imdb.com/find?q=%s',
 'ip'   => 'http://ip.f5n.de/%s',
+'mvn'  => 'http://search.maven.org/#search%%7Cga%%7C1%%7C%s',
+'p'    => 'http://php.net/%s',
 'pdo'  => 'http://packages.debian.org/%s',
-'pubu' => 'http://packages.ubuntu.com/search?keywords=%s',
-'suse' => 'http://software.opensuse.org/search?q=%s',
 'pear' => 'http://pear.php.net/package/%s',
+'pubu' => 'http://packages.ubuntu.com/search?keywords=%s',
+'s'    => 'https://encrypted.google.com/search?hl=de&q=%s',
+'qt'   => 'http://doc.qt.io/qt-5/%s.html',
+'suse' => 'http://software.opensuse.org/search?q=%s',
+'wa'   => 'http://www.wolframalpha.com/input/?i=%s',
 'wh'   => 'http://www.wowhead.com/?search=%s',
-'ww'   => 'http://wowpedia.org/%s',
 'wp'   => 'http://de.wikipedia.org/wiki/%s',
 'wpe'  => 'http://en.wikipedia.org/wiki/%s',
 'wpm'  => 'http://en.m.wikipedia.org/wiki/%s',
-'d'    => 'http://dict.leo.org/?search=%s',
-'dit'  => 'http://dict.leo.org/itde?search=%s',
-'des'  => 'http://dict.leo.org/esde?search=%s',
-'dfr'  => 'http://dict.leo.org/frde?search=%s',
-'dcn'  => 'http://dict.leo.org/chde?search=%s',
-'s'    => 'https://encrypted.google.com/search?hl=de&q=%s',
-'imdbg'=> 'http://german.imdb.com/find?q=%s',
-'imdb' => 'http://www.imdb.com/find?q=%s',
-'arm'  => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
-'arma' => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
-'arms' => 'http://%2$s.battle.net/wow/en/search?q=%1$s',
-'armt' => 'http://%3$s.battle.net/wow/en/character/%2$s/%1$s/advanced',
+'wr'   => 'http://www.warcraftrealms.com/search.php?serverid=-1&raceid=-1&classid=-1&minlevel=10&maxlevel=120&search=%s&Submit1=SEARCH',
+'ww'   => 'http://wowpedia.org/%s',
 'yt'   => 'http://www.youtube.com/results?search_query=%s&search=Search',
-'wr'   => 'http://www.warcraftrealms.com/search.php?serverid=-1&raceid=-1&classid=-1&minlevel=10&maxlevel=80&search=%s&Submit1=SEARCH',
-'wa'   => 'http://www.wolframalpha.com/input/?i=%s',
-'mvn'  => 'http://search.maven.org/#search%%7Cga%%7C1%%7C%s',
-'p'    => 'http://php.net/%s',
 'help' => 'http://q.f5n.de'
 );
 ksort($target);
-$base = 'http://q.f5n.de';
+$base = 'https://q.f5n.de';
 
 $s = urldecode($_SERVER['REQUEST_URI']);
 $s = explode(' ', $s);
@@ -119,23 +124,21 @@ if ('/' == $s[0]) {
     echo "</pre>\n";
 } else if (array_key_exists(strtolower($p), $target)) {
     if ('arm' == $p) {
-        $out = armory($s[1],$s[2],$s[3]);
-    } elseif ('arma' == $p) {
-        $out = armory($s[1],'chamber-of-aspects',$s[3]);
-    } elseif ('armt' == $p) {
-        $out = armory($s[1],'tichondrius',$s[3]);
+        $out = armory($s[1], $s[2], $s[3]);
+    } elseif ('armh' == $p) {
+        $out = armory($s[1], 'hellscream', $s[3]);
     } elseif ('arms' == $p) {
-        $out = armorySearch($s[1],$s[2]);
+        $out = armorySearch($s[1], $s[2]);
     } elseif ('qarm' == $p) {
-        $out = qarmory($s[1],$s[2], $s[3]);
+        $out = qarmory($s[1], $s[2], $s[3]);
     } elseif ('arml' == $p) {
-        $out = armorylite($s[1],$s[2], $s[3]);
+        $out = armorylite($s[1], $s[2], $s[3]);
     } else {
         unset($s[0]);
         $out = sprintf($target[$p], join(' ',$s));
     }
-    header('Referer: http://'.$base);
-    header('Location: '.$out);
+    header('Referer: ' . $base);
+    header('Location: ' . $out);
     exit();
 }
 ?>
