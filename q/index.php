@@ -64,6 +64,7 @@ $target = array(
 'dit'  => 'http://dict.leo.org/itde?search=%s',
 'eu'   => 'https://wiki.eveuniversity.org/%s',
 'erl'  => 'https://erlang.org/doc/man/%s.html',
+'ff'   => 'https://na.finalfantasyxiv.com/lodestone/character/?q=%s&worldname=&classjob=&race_tribe=&blog_lang=en&blog_lang=en&blog_lang=de&blog_lang=fr&order=',
 'g'    => 'https://duckduckgo.com/?q=%s',
 'imdb' => 'http://www.imdb.com/find?q=%s',
 'imdbg'=> 'http://german.imdb.com/find?q=%s',
