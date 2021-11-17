@@ -1,7 +1,17 @@
 <?php
 $parts = explode('.', $_SERVER['HTTP_HOST']);
 if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
-    header('Content-type: text/plain');
+    $headers = getallheaders();
+    $content_type = 'Content-type: text/plain';
+    $json = false;
+    foreach($headers as $hk => $hv) {
+        if (strtolower($hk) == 'accept-type' && strtolower($hv) == 'application/json') {
+            $content_type = 'Content-type: application/json';
+            $json = true;
+            break;
+        }
+    }
+    header($content_type);
     $ip = preg_replace('([^0-9a-fA-F:\.])', '', $_SERVER['REMOTE_ADDR']);
     if (isset($_REQUEST['help']) || '/help' == $_SERVER['REQUEST_URI']) {
         echo "Displays the ip address you're connecting from" . PHP_EOL;
@@ -16,7 +26,12 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         echo "?bin=1234              - show binary value for 1234" . PHP_EOL;
     } else if (isset($_REQUEST['ptr']) || '/ptr' == $_SERVER['REQUEST_URI']) {
         $ptr = gethostbyaddr($ip);
-        echo (false === $ptr) ? $ip : $ptr;
+        $rv = (false === $ptr) ? $ip : $ptr;
+        if ($json) {
+            echo json_encode(['result' => $rv, 'ip' => $ip]);
+        } else {
+            echo $rv;
+        }
     } else if (isset($_REQUEST['ts'])) {
         $ts = $_REQUEST['ts'];
         $ts = preg_replace('([^0-9]+)', '', $ts);
@@ -30,20 +45,40 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         if (false === $r) { $r = gmdate('c', $ts); }
         echo $r;
     } else if (isset($_REQUEST['hex'])) {
-        $r = dechex($_REQUEST['hex']);
-        echo $r;
+        $rv = dechex($_REQUEST['hex']);
+        if ($json) {
+            echo json_encode(['result' => $rv]);
+        } else {
+            echo $rv;
+        }
     } else if (isset($_REQUEST['dec'])) {
-        $r = hexdec($_REQUEST['dec']);
-        echo $r;
+        $rv = hexdec($_REQUEST['dec']);
+        if ($json) {
+            echo json_encode(['result' => $rv]);
+        } else {
+            echo $rv;
+        }
     } else if (isset($_REQUEST['bin'])) {
-        $r = decbin($_REQUEST['bin']);
-        echo $r;
+        $rv = decbin($_REQUEST['bin']);
+        if ($json) {
+            echo json_encode(['result' => $rv]);
+        } else {
+            echo $rv;
+        }
     } else if (isset($_REQUEST['d'])) {
         preg_match('((\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*)', $_REQUEST['d'], $m);
-        $r = gmmktime($m[4], $m[5], $m[6], $m[2], $m[3], $m[1]);
-        echo $r;
+        $rv = gmmktime($m[4], $m[5], $m[6], $m[2], $m[3], $m[1]);
+        if ($json) {
+            echo json_encode(['result' => $rv]);
+        } else {
+            echo $rv;
+        }
     } else {
-        echo $ip;
+        if ($json) {
+            echo json_encode(['result' => $ip]);
+        } else {
+            echo $ip;
+        }
     }
     echo PHP_EOL;
     exit();
