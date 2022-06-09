@@ -139,7 +139,7 @@ if ('/' == $s[0]) {
         $out = armorylite($s[1], $s[2], $s[3]);
     } else {
         unset($s[0]);
-        $out = sprintf($target[$p], join(' ',$s));
+        $out = sprintf($target[$p], join(' ', $s));
     }
     header('Referer: ' . $base);
     header('Location: ' . $out);

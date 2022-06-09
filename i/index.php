@@ -1,6 +1,7 @@
 <?php
 $parts = explode('.', $_SERVER['HTTP_HOST']);
-if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
+if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6', 'ipx')) &&
+    !(isset($_REQUEST['info']) || '/i' == $_SERVER['REQUEST_URI'])) {
     $headers = getallheaders();
     $content_type = 'Content-type: text/plain';
     $json = false;
@@ -17,6 +18,8 @@ if (in_array($parts[0], array('ip', 'ip6', 'ipv4', 'ipv6'))) {
         echo "Displays the ip address you're connecting from" . PHP_EOL;
         echo "" . PHP_EOL;
         echo "?help                  - show this help" . PHP_EOL;
+        echo "?info                  - show infos" . PHP_EOL;
+        echo "?ip                    - show reverse dns" . PHP_EOL;
         echo "?ptr                   - show reverse dns" . PHP_EOL;
         echo "?ascii                 - show ascii values" . PHP_EOL;
         echo "?ts=1234               - show ISO 8601 date for unix timestamp 1234" . PHP_EOL;
@@ -75,7 +78,7 @@ TEXT;
         $ts = $_REQUEST['ts'];
         $ts = preg_replace('([^0-9]+)', '', $ts);
         $ts = intval($ts);
-        if ($ts < 1 &&  strlen($_REQUEST['ts']) < 1) { $ts = time(); }
+        if ($ts < 1 && strlen($_REQUEST['ts']) < 1) { $ts = time(); }
         $fmt = 'c';
         if (isset($_REQUEST['f'])) {
             $fmt = $_REQUEST['f'];
@@ -111,6 +114,12 @@ TEXT;
             echo json_encode(['result' => $rv]);
         } else {
             echo $rv;
+        }
+    } else if (isset($_REQUEST['ip'])) {
+        if ($json) {
+            echo json_encode(['result' => $ip]);
+        } else {
+            echo $ip;
         }
     } else {
         if ($json) {
@@ -156,9 +165,11 @@ TEXT;
     }
     if (strtolower(getenv('HTTPS')) == 'on') {
         $y = str_pad('SSL', 21);
+        $sni = getenv('SSL_TLS_SNI');
         printf(
-            '%s: %s (%s %sbit %s %s)',
+            '%s: %s %s (%s %sbit %s %s)',
             $y,
+            strlen($sni) > 0 ? 'true' : '',
             getenv('SSL_PROTOCOL'),
             getenv('SSL_CIPHER'),
             getenv('SSL_CIPHER_USEKEYSIZE'),
